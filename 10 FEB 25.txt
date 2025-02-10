@@ -1,0 +1,61 @@
+DATE: 10 FEB 2025
+//lEETCODE POTD
+
+3174. Clear Digits
+
+You are given a string s.
+Your task is to remove all digits by doing this operation repeatedly:
+Delete the first digit and the closest non-digit character to its left.
+Return the resulting string after removing all digits.
+
+Example 2:
+
+Input: s = "cb34"
+Output: ""
+Explanation:
+First, we apply the operation on s[2], and s becomes "c4".
+Then we apply the operation on s[1], and s becomes "".
+
+MY APPROACH:
+
+//as it is looking like a stack problem like the working was like stack, so the approach is totally based on stack, here first i am checking whether the
+the char in the string is number or char if it is number and stack is not empty then simply popping the last element from the stack and if it is char
+then pushing it in the stack.
+
+CODE: 
+
+class Solution {
+public:
+    bool isdigit(char ch)
+    {
+         if(ch=='1' || ch=='2' || ch=='3' || ch=='4' || ch=='5' || ch=='6'||
+            ch=='7' || ch=='8' || ch=='9' || ch=='0' )
+            return true;
+
+           return false;  
+    }
+    string clearDigits(string s) {
+        stack<char>st;
+        int n=s.size();
+        string str="";
+        int i=0;
+
+        while(i<n)
+        {
+            if(isdigit(s[i]) && !st.empty())
+              st.pop();
+            else if (!isdigit(s[i]))
+               st.push(s[i]); 
+
+              i++; 
+        }
+
+        while(!st.empty())
+        {
+             str = st.top()+str;
+             st.pop();
+        }
+
+        return str;
+    }
+};
