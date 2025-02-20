@@ -1,0 +1,73 @@
+1980. Find Unique Binary String
+
+https://leetcode.com/problems/find-unique-binary-string/description/?envType=daily-question&envId=2025-02-20
+
+Given an array of strings nums containing n unique binary strings each of length n, return a binary string of length n that does not appear in nums. 
+If there are multiple answers, you may return any of them.
+
+Example 1:
+Input: nums = ["01","10"]
+Output: "11"
+Explanation: "11" does not appear in nums. "00" would also be correct.
+
+Example 2:
+Input: nums = ["00","01"]
+Output: "11"
+Explanation: "11" does not appear in nums. "10" would also be correct.
+
+Example 3:
+Input: nums = ["111","011","001"]
+Output: "101"
+Explanation: "101" does not appear in nums. "000", "010", "100", and "110" would also be correct.
+ 
+
+Constraints:
+
+n == nums.length
+1 <= n <= 16
+nums[i].length == n
+nums[i] is either '0' or '1'.
+All the strings of nums are unique.
+
+APPROACH1: BRUTE FORCE 
+make all strings of that much length and store them in a vector of string and store the given vector strings in a map and then use the find function to check 
+whetehr that string is present or not. 
+so it is a brute force approach as here we are generating all the strings of that size..
+
+
+APPROACH2: USING SET 
+using the given vector of string create a set of int type convert the string value to int and stored them in set and then traverse the array of strings and then 
+convert the string in the 16bit 
+                       bitset<int>(str).to_string()  
+to convert that 16 bit number to string part and then move to the next step is to find the substring of length n for that find the substring from 16-n to n.
+and then check for the integer part whether it is present or not in the set if not present then return that string ..
+
+
+APPROACH3: BEST APPROACH
+see in this approach make a string and traverse the given array of string and change the value of the index which is there see like if i=0, then go to 0th index
+string and check its 0th char and in the resultant stirng add the opposite of it ehn i=1, then go to 1st index and at tht index the string 1st index and then add the 
+opposite of that index in the res string 
+
+CODE:
+class Solution {
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        
+        int n=nums.size();
+        string str;
+
+        for(int i=0; i<n; i++)
+        {
+            char ch=nums[i][i];
+
+            if(ch=='0')
+              str += '1';
+            else
+              str += '0'; 
+        }
+
+        return str;
+
+    }
+};
+
