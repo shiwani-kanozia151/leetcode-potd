@@ -1,0 +1,61 @@
+105. Construct Binary Tree from Preorder and Inorder Traversal
+
+https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
+
+Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree. 
+
+Example 1:
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output: [3,9,20,null,null,15,7]
+
+Example 2:
+Input: preorder = [-1], inorder = [-1]
+Output: [-1]
+ 
+Constraints:
+
+1 <= preorder.length <= 3000
+inorder.length == preorder.length
+-3000 <= preorder[i], inorder[i] <= 3000
+preorder and inorder consist of unique values.
+Each value of inorder also appears in preorder.
+preorder is guaranteed to be the preorder traversal of the tree.
+inorder is guaranteed to be the inorder traversal of the tree.
+
+APPROACH:
+
+First of all keep in mind the traversal part and the way the traversal is like that only we need to think about the problem like here we are given preorder and inorder
+traversal so based on that the preorder means ROOT, L, R and inorder means L, ROOT, R... so accordingly the answer would be first we are taking an indexvariable which is
+passed as the refernce variable and that will be used to traverse on the preorder array and according to that index the corresponding preorder index value is used to make 
+the root of the tree. and taken 2 indexes start and end which is used to traverse on the inorder array and find the index of the elemnt that is equal to the root value as 
+after that we need to call agian the recursion for left and right subtree..
+
+CODE:
+
+class Solution {
+public:
+    TreeNode* solve(int start, int end, vector<int>& preorder, vector<int>& inorder, int &idx)
+    {
+        if(start>end) // taking idx for traversal in preorder vector..
+         return NULL;
+        
+        TreeNode* root = new TreeNode(preorder[idx]);
+       
+        int j=start;
+        while(inorder[j] != preorder[idx])
+         j++;
+ 
+          idx++;       
+
+       root->left=solve(start, j-1, preorder, inorder, idx);
+       root->right=solve(j+1, end, preorder, inorder, idx);
+
+       return root;   
+    }
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        
+         int n=preorder.size();
+         int idx=0;
+         return solve(0, n-1, preorder, inorder, idx);
+    }
+};
