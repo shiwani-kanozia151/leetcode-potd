@@ -1,0 +1,78 @@
+1358. Number of Substrings Containing All Three Characters
+
+https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/description/?envType=daily-question&envId=2025-03-11
+
+Given a string s consisting only of characters a, b and c.
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+Example 1:
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+
+Example 2:
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb". 
+
+Example 3:
+Input: s = "abc"
+Output: 1
+ 
+Constraints:
+3 <= s.length <= 5 x 10^4
+s only consists of a, b or c characters.
+
+APPROACH1: USING NESTED LOOPS
+here in this approach basically we are using an array of size 3 which is storing the count of the a, b, c and running an outer loop from 0 to n and an inner loop from
+i to n here first we will check whetehr the count of all elements present in the array is 3 if it is 3 then increment the count and like wise we will check..
+
+APPROACH2: USING SLIDING WINDOW..
+as here we are getting some idea that we will use sliding window here as here it is mention like substirng and all so here we will use the concept of sliding window as 
+we are not getting all the elements of window value greater than 0 till then we keep on moving the j as soon as all the threes value become greater than 0 we will add
+n-j to the result and move ahead i and removing the frequency of i from the array..
+
+CODE:
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        
+        int n=s.size();
+        int hash[3]={0};
+        int count=0, i=0, j=0;
+
+        while(j<n)
+        {
+            hash[s[j]-'a']++;
+
+            while(hash[0]>0 && hash[1]>0 && hash[2]>0)
+            {
+                count += (n-j);
+                hash[s[i]-'a']--;
+                i++;
+            } 
+
+            j++;
+        }
+      
+        return count;
+        /* //bRUTE FORCE APPROACH..
+        int n=s.size();
+        int count=0;
+
+        for(int i=0; i<n; i++)
+        {
+            int mp[3]={0};
+            for(int j=i; j<n; j++)
+            {
+                mp[s[j]-'a']=1;
+                if(mp[0]+mp[1]+mp[2]==3)
+                 count++;
+            }
+        }
+
+        return count;
+        */
+
+    }
+};
