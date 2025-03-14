@@ -1,0 +1,91 @@
+2226. Maximum Candies Allocated to K Children
+
+https://leetcode.com/problems/maximum-candies-allocated-to-k-children/description/?envType=daily-question&envId=2025-03-14
+
+You are given a 0-indexed integer array candies. Each element in the array denotes a pile of candies of size candies[i]. You can divide each pile into any number 
+of sub piles, but you cannot merge two piles together.
+You are also given an integer k. You should allocate piles of candies to k children such that each child gets the same number of candies. Each child can be allocated
+candies from only one pile of candies and some piles of candies may go unused.
+Return the maximum number of candies each child can get.
+
+Example 1:
+Input: candies = [5,8,6], k = 3
+Output: 5
+Explanation: We can divide candies[1] into 2 piles of size 5 and 3, and candies[2] into 2 piles of size 5 and 1. We now have five piles of candies of sizes
+5, 5, 3, 5, and 1. We can allocate the 3 piles of size 5 to 3 children. It can be proven that each child cannot receive more than 5 candies.
+
+Example 2:
+Input: candies = [2,5], k = 11
+Output: 0
+Explanation: There are 11 children but only 7 candies in total, so it is impossible to ensure each child receives at least one candy. Thus, each child gets no candy 
+and the answer is 0.
+ 
+Constraints:
+1 <= candies.length <= 10^5
+1 <= candies[i] <= 10^7
+1 <= k <= 10^12
+
+APPROACH1: BRUTE FORCE APPROACH ..
+
+in this approach basically we will be having greedy approach that first we will start allocating the candies with the highest one then one by one decreasing the value.
+like first start with highest value and then check whether all the k students get the candies or not and if all k students get the candies then we will return that candy 
+as the answer and if not able to provide that number of candies to k children then decrement the count of the candies..
+
+1. find the maximum out of the given elements..
+2. start an outer loop like for(candies=maxcandy; i>=1; i--) 
+3. start inner loop like for(int j=0; j<n; j++)
+  inside this loop count += nums[j]/candies;
+       if(candies>=k) return candies;
+
+4. likewise if any count of candies not able to provide the answer then return the 0 as answer...
+
+APPROACH2: USING BINARY SEARCH APPROACH
+
+in thsi appraoch basically we are using the binary search low=1, high=highes one in the array, and we find the mid and then check for that for every elements of the array and 
+take the count whether this count is >=k then we will be having greed to increment the low = mid+1, else high = mid-1; ..
+
+CODE:
+class Solution {
+public:
+    bool ispossible(int mid, vector<int>& candies, long long k)
+    {
+        long long count=0;
+
+        for(int i=0; i<candies.size(); i++)
+        {
+            count += candies[i]/mid;
+
+            if(count>=k)
+             return true;
+        }
+
+        return false;
+    }
+    int maximumCandies(vector<int>& candies, long long k) {
+        
+         int n=candies.size();
+         int highest=0;
+
+         for(int i=0; i<n; i++)
+          highest=max(highest, candies[i]);
+
+         int low=1, high=highest, ans=0;
+
+         while(low<=high)
+         {
+
+            int mid=low+(high-low)/2;
+
+            if(ispossible(mid, candies, k))
+            {
+                ans=mid;
+                low=mid+1;
+            } 
+            else
+             high=mid-1; 
+
+         }
+
+         return ans;
+    }
+};
