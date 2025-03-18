@@ -1,0 +1,72 @@
+2401. Longest Nice Subarray
+
+https://leetcode.com/problems/longest-nice-subarray/description/?envType=daily-question&envId=2025-03-18
+
+You are given an array nums consisting of positive integers.
+We call a subarray of nums nice if the bitwise AND of every pair of elements that are in different positions in the subarray is equal to 0.
+Return the length of the longest nice subarray.
+A subarray is a contiguous part of an array.
+Note that subarrays of length 1 are always considered nice.
+
+Example 1:
+Input: nums = [1,3,8,48,10]
+Output: 3
+Explanation: The longest nice subarray is [3,8,48]. This subarray satisfies the conditions:
+- 3 AND 8 = 0.
+- 3 AND 48 = 0.
+- 8 AND 48 = 0.
+It can be proven that no longer nice subarray can be obtained, so we return 3.
+
+Example 2:
+Input: nums = [3,1,5,11,13]
+Output: 1
+Explanation: The length of the longest nice subarray is 1. Any subarray of length 1 can be chosen.
+ 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+1 <= nums[i] <= 10^9
+
+APPRAOCH1: USING BRUTE FORCE TO SOLVE THIS 
+
+ONE APPROACH OF BRUTE FORCE WILL TAKE O(n^4) AS firstly we are using nested loop and while finding the isNice array also we are going and checking every pair whether 
+they are equal or not that too taking O(n^2) time but it can be done in O(n) time using little knowledge of bit malipulation
+
+FINDING NICE SUBARRAY ITSELF IS A PROBLEM
+
+---> so to find the nice subarray is like finding AND of every element to every element so here bascially to solve this problem we are creating a mask of 0000000000
+     then after that we will find the AND of the given element to the mask only and to update the mask we will take OR of the mask and the current element..
+
+so going back to our problem by doing this nice subarray part in O(n) the overall TC:O(N^3)
+  for(int i=0; i<n; i++)
+  {
+      for(int j=i; j<n; j++)
+      {
+          if(isnice(arr, i, j)
+          {
+            res=max(res, j-i+1);
+          }
+         else
+            break;
+    }
+ }
+
+
+
+so doing the problem in O(n^2)
+
+for(int i=0; i<n; i++)
+{
+   int mask=0;
+  for(int j=i; j<n; j++)
+  {
+      if(mask & arr[j] !=0) 
+        break;
+
+     mask |= arr[j];
+     res = max(res, j-i+1);
+  }
+}
+
+
