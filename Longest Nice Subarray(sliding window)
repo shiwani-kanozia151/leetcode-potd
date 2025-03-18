@@ -70,3 +70,31 @@ for(int i=0; i<n; i++)
 }
 
 
+
+OPTIMAL APPROACH: USING SLIDING WINDOW ...
+
+TC: O(n) 
+
+CODE:
+
+       int n = nums.size();
+
+        int i = 0;
+        int j = 0;
+
+        int result = 1;
+        int mask = 0;
+
+        while(j < n) {
+
+            while((mask & nums[j]) != 0) { //keep shrinking
+                mask = (mask ^ nums[i]);
+                i++;
+            }
+
+            result = max(result, j-i+1);
+            mask = (mask | nums[j]);
+            j++;
+        }
+
+        return result;
