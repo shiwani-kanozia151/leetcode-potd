@@ -1,0 +1,86 @@
+2563. Count the Number of Fair Pairs
+
+Given a 0-indexed integer array nums of size n and two integers lower and upper, return the number of fair pairs.
+A pair (i, j) is fair if
+0 <= i < j < n, and          //in actual no use of this statement...
+lower <= nums[i] + nums[j] <= upper
+ 
+Example 1:
+Input: nums = [0,1,7,4,4,5], lower = 3, upper = 6
+Output: 6
+Explanation: There are 6 fair pairs: (0,3), (0,4), (0,5), (1,3), (1,4), and (1,5).
+
+Example 2:
+Input: nums = [1,7,9,2,5], lower = 11, upper = 11
+Output: 1
+Explanation: There is a single fair pair: (2,3). 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+nums.length == n
+-10^9 <= nums[i] <= 10^9
+-10^9 <= lower <= upper <= 10^9
+
+
+APROACH1: BRUTE FORCE:
+using the nested loop and doing as it is given in the problem. but the solution work for some test cases only and fail for larger inputs .
+
+APPROACH2: USING SORTING:
+bascially here first we sort the array and after that we will use the concet like x = containing all the elements that are less than lower-nums[i] and y = containing all
+the elements that are less than or equal to the upper-nums[i] then after subtracting x from y i.e. y-x then we will all the elements taht are lying in the range of x to y.
+so based on this concept we will find the count. 
+first sort the array.
+second find the counts of x by using lower_bound function find the index then , idx-i-1 will give the count..
+third find the counts of y by using upper_bound function find the index thenm idx-i-1 will give the count.. why upper bound like if we have elemet equal to the 
+upper-nums[i] then it wil not be counted using the lower bound..
+forth find the difference between y-x and add it to the result..
+
+CODE:
+class Solution {
+public:
+    long long countFairPairs(vector<int>& nums, int lower, int upper) {
+        //Brute Force...
+        // long long count=0;
+
+        // int n=nums.size();
+
+        // for(int i=0; i<n; i++)
+        // {
+        //     long long sum=0;
+        //     for(int j=i+1; j<n; j++)
+        //     {
+        //         sum = nums[i]+nums[j];
+
+        //         if(sum>=lower && sum<=upper)
+        //          count++;
+        //     }
+        // }
+
+        // return count;
+
+        long long count=0;
+        int n=nums.size();
+
+        sort(nums.begin(), nums.end());
+
+        for(int i=0; i<n; i++)
+        {
+            long long total1=0;
+            int low=lower-nums[i];
+            auto idx1=lower_bound(begin(nums)+i+1, end(nums), low)-begin(nums);
+            //gives the index of element that is not less than low..
+             total1 = idx1-1-i;
+            
+            long long total2=0;
+            int high=upper-nums[i];
+            int idx2=upper_bound(begin(nums)+i+1, end(nums), high)-begin(nums);
+            //gives just greater eelement index than high..
+            total2 = idx2-1-i;
+
+           count += (total2-total1);
+        }
+
+        return count;
+    }
+};
