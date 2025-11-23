@@ -1,0 +1,88 @@
+1262. Greatest Sum Divisible by Three
+
+Given an integer array nums, return the maximum possible sum of elements of the array such that it is divisible by three.
+
+Example 1:
+
+Input: nums = [3,6,5,1,8]
+Output: 18
+Explanation: Pick numbers 3, 6, 1 and 8 their sum is 18 (maximum sum divisible by 3).
+Example 2:
+
+Input: nums = [4]
+Output: 0
+Explanation: Since 4 is not divisible by 3, do not pick any number.
+Example 3:
+
+Input: nums = [1,2,3,4,4]
+Output: 12
+Explanation: Pick numbers 1, 3, 4 and 4 their sum is 12 (maximum sum divisible by 3).
+ 
+
+Constraints:
+
+1 <= nums.length <= 4 * 10^4
+1 <= nums[i] <= 10^4
+
+APPROACH 1 : USING MATHEMATICS TO SOLVE THIS PROBLEM 
+here basically if we are dividing any number by 3 then we are getting remainder as 0, 1, 2 only so if the sum of all  the elements of the array is 0 then it is the maximum sum that is divisible by 3. 
+
+if we are getting remainder as 2 then we have to check which no are giving the remainder 2 and have to store it in a array. 
+see we will get remainder as 2 is we have a number in the form 3x+2 % 3 == 2 or by combining 2 numbers having reaminder 1 also give the remainder as 2
+                    3x+1 + 3y+1  % 3 == 2
+                    3(x+y)+2 % 3 == 2
+if we are gettiing remainder as 1 then we have to check which no are giving the remainder 1 and we have to store it in a array.
+see we will get remainder as 1 is we have a number in the form 3x+1 % 3 == 1 or by combining 2 numbers having reaminder 2 also give the remainder as 1
+                    3x+2 + 3y+2  % 3 == 2
+                    3(x+y)+4 % 3 == 2
+                    3(x+y)+3+1 % 3 ==2
+                    3(x+y+1) + 1 % 3 ==2
+
+and keep a variable sum which is taking sum of all the remainders
+at last  sum % 3 == 1 or 2 
+
+after this sort both the arrays 
+if sum % 3==2
+   sum - min(vec1[0], vec2[0]+vec2[1])
+else 
+ sum - min(vec1[0]+vec1[1], vec2[0])
+
+return this sum.
+
+
+APPROACH 2: USING RECURSION DP PROBLEM EXPLORING ALL THE PATHS 
+here see have 2 choices whether to take or not to take but atlast we need  to return the max sum 
+1. base condition :
+       if i >=n 
+         if rem==0
+            return 0;
+        return INT_MIN( because niche hum max le rhe hai toh iska koi use nhi hoga isliye ise return kr rhe hai)
+
+ class Solution {
+public:
+    int solve(int i, int remainder, vector<int>& nums, vector<vector<int>>& t) {
+        if (i >= nums.size()) {
+            return (remainder == 0) ? 0 : INT_MIN;
+        }
+
+        if (t[i][remainder] != -1)
+            return t[i][remainder];
+
+        // Pick the current number
+        int pick = nums[i] +
+                   solve(i + 1, (remainder + nums[i]) % 3, nums, t);
+
+        // Skip the current number
+        int notPick = solve(i + 1, remainder, nums, t);
+
+        return t[i][remainder] = max(pick, notPick);
+    }
+
+    int maxSumDivThree(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> t(n, vector<int>(3, -1));
+        return solve(0, 0, nums, t);
+    }
+};
+
+
