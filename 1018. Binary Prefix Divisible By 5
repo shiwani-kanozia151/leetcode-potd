@@ -1,0 +1,166 @@
+1018. Binary Prefix Divisible By 5
+
+You are given a binary array nums (0-indexed).
+We define xi as the number whose binary representation is the subarray nums[0..i] (from most-significant-bit to least-significant-bit).
+For example, if nums = [1,0,1], then x0 = 1, x1 = 2, and x2 = 5.
+Return an array of booleans answer where answer[i] is true if xi is divisible by 5.
+
+Example 1:
+Input: nums = [0,1,1]
+Output: [true,false,false]
+Explanation: The input numbers in binary are 0, 01, 011; which are 0, 1, and 3 in base-10.
+Only the first number is divisible by 5, so answer[0] is true.
+
+Example 2:
+Input: nums = [1,1,1]
+Output: [false,false,false]
+ 
+Constraints:
+1 <= nums.length <= 105
+nums[i] is either 0 or 1.
+
+
+APPROACH: BIT MANIPULATION
+Here basically i was not able to figure out the way how to proceed and then i took help of the chatgpt to get the question to be cleared .
+
+nums = [0,1,1,1,1,1,0,1,0,0]
+We’ll go step by step using the logic:
+num = (num * 2 + bit) % 5;
+
+num = current value mod 5
+If num == 0 → current number is divisible by 5 ✅
+
+🔢 Step-by-step table
+I’ll track 4 things at each index:
+
+Index i
+
+Bit = nums[i]
+
+Binary formed so far
+
+Decimal value (just for understanding)
+
+num (mod 5 only, what code actually stores)
+
+Divisible by 5?
+
+Start:
+num = 0 (nothing formed yet)
+
+➤ i = 0, bit = 0
+Binary so far: 0
+Decimal value: 0
+num = (0 * 2 + 0) % 5 = 0 % 5 = 0
+Is num == 0? → ✅ Yes
+So answer[0] = true
+
+➤ i = 1, bit = 1
+Previous binary: 0
+New binary: 01 → same as 1
+Decimal: 1
+num = (0 * 2 + 1) % 5 = 1 % 5 = 1
+num = 1 → ❌ not divisible
+So answer[1] = false
+
+➤ i = 2, bit = 1
+Previous binary: 01 (1)
+New binary: 011 → 3
+Decimal: 3
+num = (1 * 2 + 1) % 5 = 3 % 5 = 3
+num = 3 → ❌ not divisible
+So answer[2] = false
+
+➤ i = 3, bit = 1
+Previous binary: 011 (3)
+New binary: 0111
+Decimal:
+3 in binary = 11
+Shift left (×2): 3 * 2 = 6 → 110
+Add bit 1 → 7 → 111
+num = (3 * 2 + 1) % 5 = 7 % 5 = 2
+num = 2 → ❌ not divisible
+So answer[3] = false
+
+➤ i = 4, bit = 1
+Previous binary: 0111 (7)
+New binary: 01111
+Decimal:
+7 * 2 + 1 = 15
+num = (2 * 2 + 1) % 5 = 5 % 5 = 0
+num = 0 → ✅ divisible
+So answer[4] = true
+
+(And yes, 15 is divisible by 5.)
+
+➤ i = 5, bit = 1
+Previous binary: 01111 (15)
+New binary: 011111
+Decimal:
+15 * 2 + 1 = 31
+num = (0 * 2 + 1) % 5 = 1 % 5 = 1
+num = 1 → ❌ not divisible
+So answer[5] = false
+
+➤ i = 6, bit = 0
+Previous binary: 011111 (31)
+New binary: 0111110
+Decimal:
+31 * 2 + 0 = 62
+num = (1 * 2 + 0) % 5 = 2 % 5 = 2
+num = 2 → ❌ not divisible
+So answer[6] = false
+
+➤ i = 7, bit = 1
+Previous binary: 0111110 (62)
+New binary: 01111101
+Decimal:
+62 * 2 + 1 = 125
+num = (2 * 2 + 1) % 5 = 5 % 5 = 0
+num = 0 → ✅ divisible
+So answer[7] = true
+
+(125 is divisible by 5.)
+
+➤ i = 8, bit = 0
+Previous binary: 01111101 (125)
+New binary: 011111010
+Decimal:
+125 * 2 + 0 = 250
+num = (0 * 2 + 0) % 5 = 0 % 5 = 0
+num = 0 → ✅ divisible
+So answer[8] = true
+
+(250 is divisible by 5.)
+
+➤ i = 9, bit = 0
+Previous binary: 011111010 (250)
+New binary: 0111110100
+Decimal:
+250 * 2 + 0 = 500
+num = (0 * 2 + 0) % 5 = 0 % 5 = 0
+num = 0 → ✅ divisible
+So answer[9] = true
+
+
+CODE:
+
+class Solution {
+public:
+    vector<bool> prefixesDivBy5(vector<int>& nums) {
+       int n=nums.size();
+       vector<bool>res;
+       
+       int ans=0;
+       for(int i=0; i<n; i++)
+       {
+          ans = (ans*2+nums[i])%5;
+          if(ans==0)
+            res.push_back(true);
+          else
+            res.push_back(false);  
+       }
+     
+     return res;
+};
+
