@@ -1,0 +1,105 @@
+1545. Find Kth Bit in Nth Binary String
+
+Medium
+
+Given two positive integers n and k, the binary string Sn is formed as follows:
+
+S1 = "0"
+Si = Si - 1 + "1" + reverse(invert(Si - 1)) for i > 1
+Where + denotes the concatenation operation, reverse(x) returns the reversed string x, and invert(x) inverts all the bits in x (0 changes to 1 and 1 changes to 0).
+For example, the first four strings in the above sequence are:
+S1 = "0"
+S2 = "011"
+S3 = "0111001"
+S4 = "011100110110001"
+Return the kth bit in Sn. It is guaranteed that k is valid for the given n.
+
+Example 1:
+Input: n = 3, k = 1
+Output: "0"
+Explanation: S3 is "0111001".
+The 1st bit is "0".
+
+Example 2:
+Input: n = 4, k = 11
+Output: "1"
+Explanation: S4 is "011100110110001".
+The 11th bit is "1".
+ 
+
+Constraints:
+
+1 <= n <= 20
+1 <= k <= 2^n - 1
+
+
+This problem is same as:
+1. kth symbol in Grammar.
+2. kth char in String GameII.
+
+APPROACH : RECURSION.
+In this problem basically if we are trying to produce the string for n=1, 2, 3, 4 then we will be able to get the idea regarding the approach(Recursion).
+
+n=1 -->"0"
+n=2 -->"011"
+n=3 -->"011 1 110"  ---> "011 1 001"
+n=4 -->"0111001 1 1001110"  --> "0111001 1 0110001"
+
+the new n value depends upon the previous value basically here we just need to copy the previous value then needs to add 1 and then reverse the previous value.
+
+so to reverse the previous value for that also there is a logic 011  ---> 110 here first is replaces by last,  2nd is replaced by 2nd last , 3rd is replaced by 3rd last.
+
+0111001
+1001110
+
+1 -->7 (7 - (1-1)) --> len = 7, k=1;
+2 -->6 (7 - (2-1)) --> len = 7, k=2;
+3 -->5 (7 - (3-1)) --> len = 7, k=3;
+4 -->4 (7 - (4-1)) --> len = 7, k=4;
+5 -->3 (7 - (5-1)) --> len = 7, k=5;
+6 -->2 (7 - (6-1)) --> len = 7, k=6;
+7 -->1 (7 - (7-1)) --> len = 7, k=7;
+
+by this we will be able to find the reverse value by inverting the reverse value we will get out ans.
+
+overall len of string = pow(2,n)-1  OR (1<<n)-1
+
+base condition:
+if(n==1) return "0";
+
+mid = ceil(len/2.0) 
+
+if(k<mid)  return solve(n-1, k) ---> returning the previous find ans only..
+
+if(k == mid) return "1";
+
+if(k>mid)  return solve(n-1, len-(k-1));
+
+
+CODE: 
+
+class Solution {
+public:
+    char findKthBit(int n, int k) {
+        
+        if(n==1)
+         return '0';
+      int len = (1<<n)-1;
+         
+         int mid = ceil(len/2.0);
+         if(k<mid)
+          return findKthBit(n-1, k);
+         else if(k==mid)
+           return '1';
+         else
+         {
+              char ch = findKthBit(n-1, len-(k-1)); 
+              //return ch=='0'?'1':'0';
+
+              if(ch=='0') return '1';
+                   else return '0';
+         }  
+
+    
+    }
+};
